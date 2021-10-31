@@ -1,7 +1,7 @@
 /* 
  * This file is part of EasyCodeIt.
  * 
- * Copyright (C) 2020 TheDcoder <TheDcoder@protonmail.com>
+ * Copyright (C) 2021 TheDcoder <TheDcoder@protonmail.com>
  * 
  * EasyCodeIt is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,27 +17,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef CEASE_H
+#define CEASE_H
 
+#include <setjmp.h>
 #include <stdbool.h>
 #include <stdnoreturn.h>
 
-#ifndef READ_FILE_BUFFER_SIZE
-#define READ_FILE_BUFFER_SIZE 1024
-#endif
-
-#define lenof(array) (sizeof array / sizeof array[0])
-#define INIT_PTR(ptr, sz) ptr = malloc((sizeof *ptr) * sz)
-
-struct ReadFileBufferNode {
-	char buffer[READ_FILE_BUFFER_SIZE];
-	size_t data_len;
-	struct ReadFileBufferNode *next;
+struct CeasePoint {
+	jmp_buf jump;
+	char *msg;
+	bool free_msg;
 };
 
-bool chrcmp(char chr, char *arr, size_t arr_len);
-noreturn void die(char *msg);
-char *readfile(FILE *file);
+typedef struct CeasePoint CeasePoint;
+
+CeasePoint cease_get_point(void);
+noreturn void cease(CeasePoint *point, char *msg, bool free_msg);
+noreturn void cease_fmt(CeasePoint *point, char *def, char *fmt, ...);
+noreturn void cease_mem(CeasePoint *point, char *context);
 
 #endif
