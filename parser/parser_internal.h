@@ -5,6 +5,7 @@
 
 struct Operand operand_from_prim(struct Primitive *primitive);
 struct Operand operand_from_expr(struct Expression *expression);
+struct Operand operand_from_exprlist(struct ExpressionList *expression_list);
 struct Expression expr_from_prim(struct Primitive *primitive);
 struct Expression expr_from_str(char *str, size_t len);
 struct Expression expr_from_ident(char *ident, size_t len);

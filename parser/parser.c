@@ -50,6 +50,13 @@ struct Operand operand_from_expr(struct Expression *expression) {
 	return operand;
 }
 
+struct Operand operand_from_exprlist(struct ExpressionList *expression_list) {
+	struct Operand operand = {.type = OPE_EXPRESSION_LIST};
+	operand.expression_list = palloc(sizeof *operand.expression_list);
+	*operand.expression_list = *expression_list;
+	return operand;
+}
+
 struct Expression expr_from_prim(struct Primitive *primitive) {
 	// TODO: Make a copy of primitive
 	struct Expression expression = {.op = OP_NOP};
@@ -78,7 +85,7 @@ struct Expression expr_from_call(struct Expression *caller, struct ExpressionLis
 	struct Expression expression = {.op = OP_CALL};
 	expression.operands = palloc(sizeof *expression.operands * 2);
 	expression.operands[0] = operand_from_expr(caller);
-	expression.operands[1] = (struct Operand){.type = OPE_EXPRESSION_LIST, .expression_list = arguments};
+	expression.operands[1] = operand_from_exprlist(arguments);
 	return expression;
 }
 
